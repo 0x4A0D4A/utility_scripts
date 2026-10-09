@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Script for controlling the mouse of an Xorg session over SSH
 
 export DISPLAY=:0
