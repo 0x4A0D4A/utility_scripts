@@ -62,8 +62,12 @@ done
 # whether the referenced packages were part of --emulate-fhs's own package
 # set - that set only needs to cover what BASE_PKGS's FHS emulation itself
 # requires (glibc/gcc-toolchain/etc), not every tool made reachable here.
-# - /run/current-system/profile: the live system profile, source of `guix`
-#   itself (also lets `guix home reconfigure`/`guix pull` work inside).
+# - ~/.config/guix/current: the user's own `guix pull` profile, first so a
+#   bare `guix` is the same one the interactive shell uses. The system guix
+#   only knows the channels in /etc/channels.scm (no nonguix), so nonguix
+#   packages show up as "unknown package" under it.
+# - /run/current-system/profile: the live system profile (still on PATH for
+#   its other tools).
 # - ~/.guix-profile: ad hoc `guix install`ed packages.
 # - ~/.guix-home/profile: declarative packages from home-configuration.scm
 #   (including local, non-channel `my-packages` - those are only reachable
@@ -74,4 +78,4 @@ exec guix shell --container --network --emulate-fhs \
   $ALL_PKGS \
   "${SHARE_ARGS[@]}" \
   --preserve='^(TERM|COLORTERM|DISPLAY|XAUTHORITY|SSH_AUTH_SOCK|GPG_TTY|DBUS_SESSION_BUS_ADDRESS|XDG_RUNTIME_DIR|WAYLAND_DISPLAY)$' \
-  -- bash -c 'export PATH="/run/current-system/profile/bin:/run/current-system/profile/sbin:$HOME/.guix-profile/bin:$HOME/.guix-profile/sbin:$HOME/.guix-home/profile/bin:$HOME/.guix-home/profile/sbin:$PATH"; exec "$0" "$@"' "$REAL_CLAUDE" "$@"
+  -- bash -c 'export PATH="$HOME/.config/guix/current/bin:/run/current-system/profile/bin:/run/current-system/profile/sbin:$HOME/.guix-profile/bin:$HOME/.guix-profile/sbin:$HOME/.guix-home/profile/bin:$HOME/.guix-home/profile/sbin:$PATH"; exec "$0" "$@"' "$REAL_CLAUDE" "$@"
