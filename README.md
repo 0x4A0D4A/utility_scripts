@@ -33,6 +33,7 @@
 - `play_music.sh`: simple script to play music albums based off the supplied artist & album name.
 - `qutebrowser_search.sh`: script that finds all the search engines defined in the qutebrowser `config.py` configuration file and makes them available for searching via dmenu, i.e. allow web searching with qutebrowser without having to wait for it to start up before you start your search.
 - `qutebrowser_dmenu.pl`: script that constructs a `dmenu` menu of all search engines defined in the `qutebrowser` configuration file for searching without first launching `qutebrowser`.
+- `remote_sudo.sh`: script to run one command as root on a remote host, feeding the sudo password from `pass` over a pipe. Primarily intended to give an agent the ability to run some superuser commands on a remote server once, with prior approval, and not without
 - `repos_checker.sh`: script to find all of the Git repositories in the current directory & its sub-directories and display each found repository's `git status`.
 - `screenshot.sh`: screenshot script for both Xorg and Wayland with selection that both saves the image file and adds the image to the clipboard, and notifies the user via `notify-send`.
 - `stdin_to_notis.sh`: scripts that reads from `stdin` and sends each line as a system notification. Intended for use when a program that outputs to `stdout` is called from a non-terminal or graphical program, making the `stdout` output inaccessible. The output can instead be piped into this script to make it readable as a system notification.
