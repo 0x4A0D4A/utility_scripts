@@ -109,7 +109,7 @@ sub write_synced_lyrics {
     my ($track, $synced_lyrics, $lyric_file) = @_;
     print("Writing synced lyrics to $lyric_file\n");
 
-    open(my $file_handler, '>', $lyric_file)
+    open(my $file_handler, '>:encoding(UTF-8)', $lyric_file)
         or warn("Cannot open $lyric_file") and return;
     print {$file_handler} ($synced_lyrics);
     close($file_handler);
