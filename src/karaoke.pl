@@ -87,11 +87,13 @@ sub get_synced_lyrics {
 
     my $best_duration_difference; # variable to store how different the closest duration match found was
     my $best_synced_lyrics; # variable to store the synced lyrics of the closest duration match found
+    my $found_synced = 0; # whether any result had synced lyrics, regardless of duration
 
     foreach my $lyric_object (@$lyric_objects) {
         my $synced_lyrics = $lyric_object->{syncedLyrics};
 
         if (defined $synced_lyrics) {
+            $found_synced = 1;
             my $duration_difference = abs($lyric_object->{duration} - $duration);
 
             # excluding synced lyrics where the duration is too different from the file we have
@@ -99,6 +101,19 @@ sub get_synced_lyrics {
                 $best_duration_difference = $duration_difference;
                 $best_synced_lyrics = $synced_lyrics;
             }
+        }
+    }
+
+    if (!defined $best_synced_lyrics) {
+        if (@$lyric_objects == 0) {
+            warn("No lyrics found in LRCLIB for \"$track_name\" by $artist_name (album: $album_name)\n");
+        }
+        elsif (!$found_synced) {
+            warn("LRCLIB has lyrics for \"$track_name\" by $artist_name, but none are synced\n");
+        }
+        else {
+            warn("LRCLIB has synced lyrics for \"$track_name\" by $artist_name, "
+                . "but none match the track duration (${duration}s ±2s)\n");
         }
     }
 
@@ -133,7 +148,7 @@ sub main {
             or warn("Failed to extract duration from $track") and next;
 
         my $synced_lyrics = get_synced_lyrics($track_name, $artist_name, $album_name, $duration)
-            or warn("Failed to fetch synced lyrics for $track") and next;
+            or next;
 
         write_synced_lyrics($track, $synced_lyrics, $lyric_file);
     }
